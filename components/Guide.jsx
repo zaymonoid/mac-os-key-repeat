@@ -4,12 +4,7 @@ import CopyButton from "./CopyButton";
 import { VSpacer } from "./Spacers";
 import { Code, Heading, Text } from "./Typography";
 import {
-  DEFAULT_INITIAL_KEY_REPEAT,
-  DEFAULT_KEY_REPEAT,
-  INITIAL_KEY_REPEAT_COMMAND,
-  KEY_REPEAT_COMMAND,
   MIN_VALUE,
-  PRESS_AND_HOLD_COMMAND,
   REVERT_COMMANDS,
   SETTINGS_MIN_INITIAL_KEY_REPEAT,
   SETTINGS_MIN_KEY_REPEAT,
@@ -41,8 +36,8 @@ export const FAQ = [
 
 export const faqPlainText = (answer) => answer.replace(/`/g, "");
 
-const SectionHeading = (props) => <Heading as="h2" size="lg" {...props} />;
-const QuestionHeading = (props) => <Heading as="h3" size="md" {...props} />;
+const SectionHeading = (props) => <Heading as="h2" size="md" {...props} />;
+const QuestionHeading = (props) => <Heading as="h3" size="sm" {...props} />;
 
 const InlineCode = styled("code", { color: "$orange", fontFamily: "$mono" });
 
@@ -89,27 +84,6 @@ const Guide = () => (
       timings in your browser: drag the sliders, hold a key in the box above,
       and feel the difference immediately. The commands update as you go, so
       once it feels right you copy them, run them, and restart once.
-    </Text>
-
-    <VSpacer size="md" />
-    <SectionHeading>How to apply</SectionHeading>
-    <Text>
-      Copy the two commands beside the tool (they carry your slider values) and
-      run them in Terminal. With the starting values of{" "}
-      {toMs(DEFAULT_INITIAL_KEY_REPEAT)} ms delay and {toMs(DEFAULT_KEY_REPEAT)}{" "}
-      ms repeat, they are:
-    </Text>
-    <CommandLine
-      value={`${INITIAL_KEY_REPEAT_COMMAND} ${DEFAULT_INITIAL_KEY_REPEAT}`}
-    />
-    <CommandLine value={`${KEY_REPEAT_COMMAND} ${DEFAULT_KEY_REPEAT}`} />
-    <Text>
-      Optional: make letter keys repeat instead of showing the accent picker:
-    </Text>
-    <CommandLine value={PRESS_AND_HOLD_COMMAND} />
-    <Text>
-      Then log out and back in, or restart. The new timings apply from your next
-      login.
     </Text>
 
     <VSpacer size="md" />
