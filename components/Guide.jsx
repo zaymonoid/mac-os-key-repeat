@@ -25,7 +25,7 @@ export const FAQ = [
   },
   {
     question: "What's the fastest safe value?",
-    answer: `Nothing breaks at low values: these are ordinary preferences and the revert commands below restore the defaults. The fastest this tool offers is KeyRepeat ${MIN_VALUE} (${toMs(MIN_VALUE)} ms). Very short InitialKeyRepeat values make accidental repeats likely during normal typing, so try them in the box above first. If it feels too fast here, it will feel too fast on your Mac.`,
+    answer: `Nothing breaks at low values: these are ordinary preferences and the revert commands above restore the defaults. The fastest this tool offers is KeyRepeat ${MIN_VALUE} (${toMs(MIN_VALUE)} ms). Very short InitialKeyRepeat values make accidental repeats likely during normal typing, so try them in the box above first. If it feels too fast here, it will feel too fast on your Mac.`,
   },
   {
     question: "Why don't letter keys repeat?",
@@ -94,15 +94,18 @@ const Guide = () => (
     <VSpacer size="md" />
     <SectionHeading>How to apply</SectionHeading>
     <Text>
-      Run these in Terminal with the values you picked above (shown here with
-      the starting values: {toMs(DEFAULT_INITIAL_KEY_REPEAT)} ms delay,{" "}
-      {toMs(DEFAULT_KEY_REPEAT)} ms repeat):
+      Copy the two commands beside the tool (they carry your slider values) and
+      run them in Terminal. With the starting values of{" "}
+      {toMs(DEFAULT_INITIAL_KEY_REPEAT)} ms delay and {toMs(DEFAULT_KEY_REPEAT)}{" "}
+      ms repeat, they are:
     </Text>
     <CommandLine
       value={`${INITIAL_KEY_REPEAT_COMMAND} ${DEFAULT_INITIAL_KEY_REPEAT}`}
     />
     <CommandLine value={`${KEY_REPEAT_COMMAND} ${DEFAULT_KEY_REPEAT}`} />
-    <Text>Optionally, make letter keys repeat instead of showing accents:</Text>
+    <Text>
+      Optional: make letter keys repeat instead of showing the accent picker:
+    </Text>
     <CommandLine value={PRESS_AND_HOLD_COMMAND} />
     <Text>
       Then log out and back in, or restart. The new timings apply from your next

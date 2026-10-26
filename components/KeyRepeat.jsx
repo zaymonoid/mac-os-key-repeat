@@ -93,6 +93,7 @@ const BufferToggle = () => {
         <KeyboardIcon />
         <Text>Typing mode</Text>
         <Switch
+          aria-label="Typing mode: keep typed text instead of clearing it on key up"
           isChecked={!autoClear}
           onChange={(e) => setAutoClear((a) => !a)}
           size="sm"
@@ -132,7 +133,7 @@ const KeyRepeat = () => {
 
   return (
     <KeyRepeatInput
-      placeholder="Press and hold a key (Implemented in Browser)"
+      placeholder="Press and hold a key to feel the timings above"
       aria-label="Key repeat test area"
       value={buffer}
       onKeyDown={down}
@@ -151,10 +152,8 @@ const Commands = () => {
     <div role="none">
       <VStack spacing={4} align="stretch">
         <Text>
-          These <em>terminal commands</em> let you set{" "}
-          <strong>key-repeat</strong> values below the minimum available in{" "}
-          <em>system preferences</em>. Copy them into your terminal to set the
-          chosen key repeat timings:
+          When it feels right, run these in Terminal. They update as you move
+          the sliders:
         </Text>
         <HStack gap={2} align="center">
           <Code>
@@ -170,8 +169,8 @@ const Commands = () => {
         </HStack>
         <VSpacer size="xs" />
         <Text>
-          Copy this command to disable <em>press and hold</em> for special
-          characters:
+          Optional: make letter keys repeat instead of showing the accent
+          picker:
         </Text>
         <HStack gap={2} align="center">
           <Code>{PRESS_AND_HOLD_COMMAND}</Code>
@@ -179,8 +178,8 @@ const Commands = () => {
         </HStack>
         <VSpacer size="xs" />
         <Text>
-          <em>Note:</em> You must log out or restart for these changes to take
-          effect.
+          Changes apply after you log out or restart. Nothing here changes your
+          Mac until you run the commands.
         </Text>
       </VStack>
     </div>
