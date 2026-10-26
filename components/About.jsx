@@ -1,10 +1,6 @@
 import { Stack } from "@chakra-ui/react";
 import { Link } from "./Typography";
-import {
-  TwitterLogoIcon,
-  GitHubLogoIcon,
-  PersonIcon,
-} from "@radix-ui/react-icons";
+import { GitHubLogoIcon, PersonIcon } from "@radix-ui/react-icons";
 
 const About = () => {
   return (
@@ -14,10 +10,6 @@ const About = () => {
         <Link href="https://github.com/zaymonoid/mac-os-key-repeat">
           View the source on GitHub
         </Link>
-      </Stack>
-      <Stack direction="row" alignItems="center">
-        <TwitterLogoIcon />{" "}
-        <Link href="https://twitter.com/ZaymonAntonio">@ZaymonAntonio</Link>
       </Stack>
       <Stack direction="row" alignItems="center">
         <PersonIcon />
