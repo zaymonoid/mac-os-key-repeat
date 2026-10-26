@@ -13,7 +13,7 @@ const About = () => {
       </Stack>
       <Stack direction="row" alignItems="center">
         <PersonIcon />
-        <Link href="https://www.zaymon.dev">About me</Link>
+        <Link href="https://zaymonoid.com">About me</Link>
       </Stack>
     </Stack>
   );
