@@ -8,7 +8,6 @@ import {
   DEFAULT_KEY_REPEAT,
   INITIAL_KEY_REPEAT_COMMAND,
   KEY_REPEAT_COMMAND,
-  MAX_VALUE,
   MIN_VALUE,
   PRESS_AND_HOLD_COMMAND,
   REVERT_COMMANDS,
@@ -45,73 +44,7 @@ export const faqPlainText = (answer) => answer.replace(/`/g, "");
 const SectionHeading = (props) => <Heading as="h2" size="lg" {...props} />;
 const QuestionHeading = (props) => <Heading as="h3" size="md" {...props} />;
 
-const Table = styled("table", {
-  fontFamily: "$mono",
-  fontSize: "$2",
-  borderCollapse: "collapse",
-  width: "100%",
-  maxWidth: 640,
-
-  "& th, & td": {
-    textAlign: "left",
-    paddingBlock: "$3",
-    paddingInline: "$4",
-    borderBottom: "1px solid rgba(255, 170, 72, 0.35)",
-  },
-  "& th": { color: "$orange", fontWeight: "normal" },
-});
-
-const TableScroller = styled("div", { overflowX: "auto" });
-
-const VisuallyHiddenCaption = styled("caption", {
-  position: "absolute",
-  width: 1,
-  height: 1,
-  overflow: "hidden",
-  clip: "rect(0 0 0 0)",
-  whiteSpace: "nowrap",
-});
-
 const InlineCode = styled("code", { color: "$orange", fontFamily: "$mono" });
-
-const valueNote = (value, settingsMin) => {
-  if (value < settingsMin) return "Terminal only";
-  if (value === settingsMin) return "System Settings minimum";
-  return "";
-};
-
-const ValuesTable = () => {
-  const values = [];
-  for (let v = MIN_VALUE; v <= MAX_VALUE; v++) values.push(v);
-
-  return (
-    <TableScroller>
-      <Table>
-        <VisuallyHiddenCaption>
-          macOS KeyRepeat and InitialKeyRepeat values in milliseconds
-        </VisuallyHiddenCaption>
-        <thead>
-          <tr>
-            <th scope="col">Value</th>
-            <th scope="col">Milliseconds</th>
-            <th scope="col">KeyRepeat</th>
-            <th scope="col">InitialKeyRepeat</th>
-          </tr>
-        </thead>
-        <tbody>
-          {values.map((v) => (
-            <tr key={v}>
-              <td>{v}</td>
-              <td>{`${toMs(v)} ms`}</td>
-              <td>{valueNote(v, SETTINGS_MIN_KEY_REPEAT)}</td>
-              <td>{valueNote(v, SETTINGS_MIN_INITIAL_KEY_REPEAT)}</td>
-            </tr>
-          ))}
-        </tbody>
-      </Table>
-    </TableScroller>
-  );
-};
 
 const CommandLine = ({ value }) => (
   <HStack gap={2} align="center">
@@ -125,38 +58,45 @@ const RichText = ({ children }) => (
   <Text>
     {children
       .split("`")
-      .map((part, i) => (i % 2 ? <InlineCode key={i}>{part}</InlineCode> : part))}
+      .map((part, i) =>
+        i % 2 ? <InlineCode key={i}>{part}</InlineCode> : part,
+      )}
   </Text>
 );
 
 const Guide = () => (
   <VStack as="section" spacing={4} align="stretch">
-    <SectionHeading>Why use this instead of System Settings?</SectionHeading>
+    <SectionHeading>How to change key repeat speed on a Mac</SectionHeading>
     <Text>
-      System Settings (System Preferences on older macOS) caps key repeat: the
-      fastest repeat is {toMs(SETTINGS_MIN_KEY_REPEAT)} ms and the shortest
-      delay is {toMs(SETTINGS_MIN_INITIAL_KEY_REPEAT)} ms. The{" "}
-      <InlineCode>defaults write</InlineCode> command can go lower, but changes only apply
-      after you log out or restart, which makes trial and error painful. This
-      tool simulates the timings in your browser so you can find what feels
-      right first.
+      The sliders in System Settings &gt; Keyboard cover most people. If you
+      want it faster, the same two preferences can be set from Terminal with{" "}
+      <InlineCode>defaults write</InlineCode>:{" "}
+      <InlineCode>KeyRepeat</InlineCode> (the interval between repeats) and{" "}
+      <InlineCode>InitialKeyRepeat</InlineCode> (the delay before repeating
+      starts). Both are whole numbers where each unit is {toMs(1)} ms. System
+      Settings stops at KeyRepeat {SETTINGS_MIN_KEY_REPEAT} (
+      {toMs(SETTINGS_MIN_KEY_REPEAT)} ms) and InitialKeyRepeat{" "}
+      {SETTINGS_MIN_INITIAL_KEY_REPEAT} ({toMs(SETTINGS_MIN_INITIAL_KEY_REPEAT)}{" "}
+      ms); Terminal goes all the way down to {MIN_VALUE} ({toMs(MIN_VALUE)} ms).
     </Text>
 
     <VSpacer size="md" />
-    <SectionHeading>Key repeat values in milliseconds</SectionHeading>
+    <SectionHeading>Why test it here first?</SectionHeading>
     <Text>
-      <InlineCode>KeyRepeat</InlineCode> (the interval between repeats) and{" "}
-      <InlineCode>InitialKeyRepeat</InlineCode> (the delay before repeating starts) are
-      whole numbers, where each unit is {toMs(1)} ms.
+      macOS only reads these preferences at login, so every guess costs a log
+      out or restart. Most people try a value, find it too fast or too slow, and
+      go around that loop several times. This page simulates the exact same
+      timings in your browser: drag the sliders, hold a key in the box above,
+      and feel the difference immediately. The commands update as you go, so
+      once it feels right you copy them, run them, and restart once.
     </Text>
-    <ValuesTable />
 
     <VSpacer size="md" />
     <SectionHeading>How to apply</SectionHeading>
     <Text>
-      Run these in Terminal, swapping in the values you picked above. These use
-      the tool&apos;s starting values ({toMs(DEFAULT_INITIAL_KEY_REPEAT)} ms
-      delay, {toMs(DEFAULT_KEY_REPEAT)} ms repeat):
+      Run these in Terminal with the values you picked above (shown here with
+      the starting values: {toMs(DEFAULT_INITIAL_KEY_REPEAT)} ms delay,{" "}
+      {toMs(DEFAULT_KEY_REPEAT)} ms repeat):
     </Text>
     <CommandLine
       value={`${INITIAL_KEY_REPEAT_COMMAND} ${DEFAULT_INITIAL_KEY_REPEAT}`}
@@ -165,8 +105,8 @@ const Guide = () => (
     <Text>Optionally, make letter keys repeat instead of showing accents:</Text>
     <CommandLine value={PRESS_AND_HOLD_COMMAND} />
     <Text>
-      Then log out and back in, or restart. The new timings apply from your
-      next login.
+      Then log out and back in, or restart. The new timings apply from your next
+      login.
     </Text>
 
     <VSpacer size="md" />
