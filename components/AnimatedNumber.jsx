@@ -1,9 +1,11 @@
-import { useRef, useEffect } from "react";
+import { useRef, useEffect, useState } from "react";
 import { useMotionValue, useSpring } from "framer-motion";
 
 export function AnimatedNumber({ value }) {
   const ref = useRef(null);
-  const motionValue = useMotionValue(0);
+  // Render the starting value so server-rendered HTML contains the number.
+  const [initialValue] = useState(value);
+  const motionValue = useMotionValue(value);
   const springValue = useSpring(motionValue, { stiffness: 400, damping: 30 });
 
   useEffect(() => {
@@ -20,5 +22,5 @@ export function AnimatedNumber({ value }) {
     [springValue],
   );
 
-  return <span ref={ref} />;
+  return <span ref={ref}>{initialValue}</span>;
 }
