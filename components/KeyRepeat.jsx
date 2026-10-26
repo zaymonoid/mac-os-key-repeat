@@ -18,6 +18,16 @@ import { Code, Text } from "./Typography";
 import { UpdateIcon, LapTimerIcon, KeyboardIcon } from "@radix-ui/react-icons";
 import { AnimatedNumber } from "./AnimatedNumber";
 import CopyButton from "./CopyButton";
+import {
+  DEFAULT_INITIAL_KEY_REPEAT,
+  DEFAULT_KEY_REPEAT,
+  INITIAL_KEY_REPEAT_COMMAND,
+  KEY_REPEAT_COMMAND,
+  MAX_VALUE,
+  MIN_VALUE,
+  PRESS_AND_HOLD_COMMAND,
+  toMs,
+} from "../lib/keyRepeat";
 
 const KeyRepeatInput = styled("textarea", {
   fontFamily: "$mono",
@@ -43,11 +53,8 @@ const KeyRepeatInput = styled("textarea", {
   },
 });
 
-const INITIAL_DELAY = 12;
-const INITIAL_REPEAT = 2;
-
-const delayAtom = atom(INITIAL_DELAY);
-const repeatAtom = atom(INITIAL_REPEAT);
+const delayAtom = atom(DEFAULT_INITIAL_KEY_REPEAT);
+const repeatAtom = atom(DEFAULT_KEY_REPEAT);
 const autoClearAtom = atom(true);
 
 const MillisecondSlider = ({ valueAtom, icon, label }) => {
@@ -58,10 +65,16 @@ const MillisecondSlider = ({ valueAtom, icon, label }) => {
       <Stack direction="row" alignItems="center">
         {icon}
         <Text>
-          {label}: {value * 15} ms
+          {label}: {toMs(value)} ms
         </Text>
       </Stack>
-      <Slider onChange={setValue} value={value} min={1} max={20}>
+      <Slider
+        onChange={setValue}
+        value={value}
+        min={MIN_VALUE}
+        max={MAX_VALUE}
+        aria-label={label}
+      >
         <SliderTrack bg="whiteAlpha.500">
           <SliderFilledTrack bg="white" />
         </SliderTrack>
@@ -107,8 +120,8 @@ const KeyRepeatControls = () => (
   </>
 );
 
-const delayMsAtom = atom((get) => get(delayAtom) * 15);
-const repeatMsAtom = atom((get) => get(repeatAtom) * 15);
+const delayMsAtom = atom((get) => toMs(get(delayAtom)));
+const repeatMsAtom = atom((get) => toMs(get(repeatAtom)));
 
 const KeyRepeat = () => {
   const { down, up, buffer } = useKeyRepeat(
@@ -120,6 +133,7 @@ const KeyRepeat = () => {
   return (
     <KeyRepeatInput
       placeholder="Press and hold a key (Implemented in Browser)"
+      aria-label="Key repeat test area"
       value={buffer}
       onKeyDown={down}
       onKeyUp={up}
@@ -128,11 +142,6 @@ const KeyRepeat = () => {
     />
   );
 };
-
-const INITIAL_KEY_REPEAT_COMMAND = `defaults write -g InitialKeyRepeat -int`;
-const KEY_REPEAT_COMMAND = `defaults write -g KeyRepeat -int`;
-const PRESS_AND_HOLD_COMMAND =
-  "defaults write -g ApplePressAndHoldEnabled -bool false";
 
 const Commands = () => {
   const [delay] = useAtom(delayAtom);
